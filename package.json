@@ -1,0 +1,29 @@
+{
+  "name": "nodejs-samples",
+  "version": "1.0.0",
+  "description": "nodejs-samples fft tutorials",
+  "main": "home.js",
+  "scripts": {
+    "test": "mocha hometest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NilaPazhamalai/nodejs-samples.git"
+  },
+  "keywords": [
+    "nodejs",
+    "samples",
+    "fft",
+    "tutorials"
+  ],
+  "author": "Vennila Pazhamalai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NilaPazhamalai/nodejs-samples/issues"
+  },
+  "homepage": "https://github.com/NilaPazhamalai/nodejs-samples#readme",
+  "dependencies": {
+    "formidable": "^1.2.0",
+    "nodemailer": "^4.6.3"
+  }
+}
