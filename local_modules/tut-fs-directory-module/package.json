@@ -1,0 +1,15 @@
+{
+  "name": "fs-dir-module",
+  "version": "1.0.0",
+  "description": "local module for directory operations",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha dirtest.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NilaPazhamalai/nodejs-samples.git"
+  },
+  "author": "Nila Pazhamalai",
+  "license": "ISC"
+}

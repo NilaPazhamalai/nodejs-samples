@@ -7,7 +7,6 @@ Global objects
 console.log(__filename);
 console.log(__dirname);
 
-
 var delayFn = ()=>{
     console.log("Hello after 2 seconds");
 }

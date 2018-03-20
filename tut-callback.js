@@ -1,5 +1,4 @@
 var fs = require('fs');
-
 var fileName = './june2012.txt';
 
 //sync block

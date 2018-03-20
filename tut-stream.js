@@ -1,92 +1,32 @@
 var fs = require('fs');
 var zlib =  require('zlib');
-
-
-var fileName = './june2012.txt';
-var outputFileName = './output.txt';
-var pipeOutputFile = './pipeOutput.txt';
-var inputGzFileName = './fileUpload.html';
-var gzFileName = './pipe.txt.gz';
-var writeData = '';
-var textToWrite = 'Hello there!';
-
-var addDataListener = (data) => {
-    writeData += data;
-}
-var printOutputListener = () => {
-    printOperation("READ");
-    console.log(writeData);
-}
-var printErrorListener = (error) => {
-    console.log('Error stack trace : ' + error.stack);
-}
-// to add operation in error listener.
-
-var printOperation = (operation) => {
-    console.log('------------------------------');
-    console.log(operation + '   operation: ');
-    console.log('------------------------------');
-}
+var streamListenerModule = require('./tut-stream-listener-module.js');
 //Read stream
-
-var readStream = fs.createReadStream(fileName);
-readStream.on('data', addDataListener);
-readStream.on('end', printOutputListener);
-readStream.on('error', printErrorListener);
-
-
-
-//Write Stream
-
-var printWriteOutputListener = () => {
-    printOperation("WRITE");
-    console.log('write done!');
-    console.log('fileName: ' + outputFileName);
-}
-
-
-var writeStream = fs.createWriteStream(outputFileName);
-writeStream.write(textToWrite);
+var readStream = fs.createReadStream(streamListenerModule.file.fileName);
+readStream.on('data', streamListenerModule.addDataListener);
+readStream.on('end', streamListenerModule.printOutputListener);
+readStream.on('error', streamListenerModule.printErrorListener);
+ //Write Stream
+var writeStream = fs.createWriteStream(streamListenerModule.file.outputFileName);
+writeStream.write(streamListenerModule.file.textToWrite);
 writeStream.end();
-writeStream.on('finish', printWriteOutputListener);
-writeStream.on('error', printErrorListener);
-
-
+writeStream.on('finish',streamListenerModule.printWriteOutputListener);
+writeStream.on('error',streamListenerModule.printErrorListener);
 // piping stream
-
-var printPipeOutputListener = () => {
-    printOperation("PIPE");
-    console.log('file piping done!');
-    console.log('piped fileName: ' + pipeOutputFile);
-}
-
-var rs = fs.createReadStream(fileName);
-var ws = fs.createWriteStream(pipeOutputFile);
+var rs = fs.createReadStream(streamListenerModule.file.fileName);
+var ws = fs.createWriteStream(streamListenerModule.file.pipeOutputFile);
 readStream.pipe(ws);
-writeStream.on('finish', printPipeOutputListener);
-writeStream.on('error', printErrorListener);
-
-
+writeStream.on('finish', streamListenerModule.printPipeOutputListener);
+writeStream.on('error', streamListenerModule.printErrorListener);
 //transform
-/*
-var printZipOutputListener = () => {
-    printOperation("TRANSFORM & CHAINING");
-    console.log('file ZIP done!');
-    console.log('zip fileName: ' + gzFileName);
-}
-var rst = fs.createReadStream(inputGzFileName);
-var wst = rst.pipe(zlib.createGzip()).pipe(fs.createWriteStream(gzFileName));
-writeStream.on('finish', printZipOutputListener);
-writeStream.on('error', printErrorListener);
 
-*/
-var printUnZipOutputListener = () => {
-    printOperation("TRANSFORM & CHAINING");
-    console.log('file unzip done!');
-    console.log('unzip fileName: ' + './out.txt');
-}
-var rstr = fs.createReadStream(gzFileName);
+var rst = fs.createReadStream(streamListenerModule.file.inputGzFileName);
+var wst = rst.pipe(zlib.createGzip()).pipe(fs.createWriteStream(streamListenerModule.file.zipFileName));
+writeStream.on('finish', streamListenerModule.printZipOutputListener);
+writeStream.on('error', streamListenerModule.printErrorListener);
+
+var rstr = fs.createReadStream(streamListenerModule.file.gzFileName);
 var wrst = rstr.pipe(zlib.createGunzip()).pipe(fs.createWriteStream('./out.txt')) ;
-writeStream.on('finish', printUnZipOutputListener);
-writeStream.on('error', printErrorListener);
+writeStream.on('finish', streamListenerModule.printUnZipOutputListener);
+writeStream.on('error',streamListenerModule. printErrorListener);
 

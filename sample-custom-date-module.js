@@ -1,5 +1,4 @@
-exports.getFullDate = ()=>
-{
+exports.getFullDate = ()=>{
     return new Date();
 }
 

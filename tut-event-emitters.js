@@ -1,5 +1,5 @@
 /* 
-* Even trigger implemented with arguments
+* Even trigger implemented with arguments - tryout with available methods
 */
 
 var events = require('events');

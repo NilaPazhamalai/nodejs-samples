@@ -1,63 +1,32 @@
-var fs = require('fs');
+/* File Upload - http://localhost:8080/fileInput
+*/
 var formidable = require('formidable');
-var http = require('http');
 var url = require('url');
+var serverModule = require("./sample-createServer-module.js")
+var fileUploadModule = require("./sample-file-upload-module.js")
+var viewResolverModule = require("./sample-html-view-resolver-module.js")
 
-// read file and show html
-var inputHtmlFileName = './fileUpload.html';
-var urlInput = '/fileInput';
-var urlUpload = '/fileUpload';
 
 var reqHandler = (request, response) => {
-    
-
-    if (urlInput == request.url) {
-        //show input screen
-        
-        fs.readFile(inputHtmlFileName, (error, data) => {
-            if (error) {
-                console.log('error occured in reading input html file');
-                response.writeHead(500, { 'Content-Type': 'text/html' });
-                response.write('server error in reading html file');
-                return response.end();
-            } else {
-                response.writeHead(200, { 'Content-Type': 'text/html' });
-                response.write(data.toString());
-                return response.end();
-            }
-        });
+    if (fileUploadModule.urlProperties.urlInput == request.url) {
+        viewResolverModule.resolveViewPage(fileUploadModule.htmlProperties.inputHtmlFileName, response);
     } else
-        if (urlUpload == request.url) {
+        if (fileUploadModule.urlProperties.urlUpload == request.url) {
             // process file
             var form = new formidable.IncomingForm();
             form.parse(request, (error, fields, files) => {
                 var oldPath = files.fileToUpload.path;
-                var newPath = 'C:/Users/vennilap/uploadedFiles/' + files.fileToUpload.name;
-                fs.rename(oldPath, newPath, (error) => {
-                    if (error) {
-                        console.log('error occured in uploading');
-                        response.writeHead(500, { 'Content-Type': 'text/html' });
-                        response.write('server error in uploading  file');
-                        response.write('<a href=' + urlInput + '> Go back </a>');
-                        return response.end();
-                    } else {
-                        response.writeHead(200, { 'Content-Type': 'text/html' });
-                        response.write('File uploaded successfully');
-                        response.write('<br>');
-                        response.write('<a href=' + urlInput + '> Go back </a>');
-                        return response.end();
-                    }
-                })
+                var newPath = fileUploadModule.filePath + files.fileToUpload.name;
+                var fileUploadSuccess = fileUploadModule.uploadFile(oldPath, newPath, fileUploadModule.htmlProperties.processHtmlFileName, fileUploadModule.htmlProperties.errorHtmlFileName, response)
             });
 
         }
-    }
+}
+serverModule.createServer(reqHandler, '8080');
 
 
-var server = http.createServer(reqHandler);
-server.listen('8080');
 
-console.log('server listening');
+
 
 
 

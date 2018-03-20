@@ -1,7 +1,4 @@
-/* 
-* Even trigger implemented with arguments
-*/
-
+/*  Even trigger implemented with arguments*/
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
 

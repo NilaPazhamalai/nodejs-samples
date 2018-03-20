@@ -20,7 +20,7 @@ mailer.sendMail(options , (error,info)=>{
         console.log('error sending email');
         console.log(error.stack);
     }else{
-    console.log('Email send ' + info.response)
+    console.log('Email sent ' + info.response)
     }
 });
 
