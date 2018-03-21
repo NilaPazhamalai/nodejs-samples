@@ -26,6 +26,7 @@
     "formidable": "^1.2.0",
     "fs-dir-module": "file:local_modules/tut-fs-directory-module",
     "nodemailer": "^4.6.3",
+    "request": "^2.85.0",
     "url-pattern": "^1.0.3"
   },
   "devDependencies": {

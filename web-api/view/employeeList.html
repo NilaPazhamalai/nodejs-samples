@@ -1,2 +1,25 @@
 <h1> Employee List </h1>
 <a href="/api/index"> Back </a>
+
+<table>
+    <thead>
+        <th>NO</th>
+        <th>NAME</th>
+        <th>ACTIONS</th>
+    </thead>
+    <tbody>
+        <td></td>
+        <td></td>
+        <td>
+            <form action="/employeeUpdate" method="POST">
+                <input type="hidden" name="id" value=>
+                <input type="submit" value="update">
+            </form>
+            &nbsp;
+            <form action="/employeeRemove" method="POST">
+                <input type="hidden" name="id" value=>
+                <input type="submit" value="delete">
+            </form>
+        </td>
+    </tbody>
+</table>

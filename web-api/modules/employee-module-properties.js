@@ -1,3 +1,4 @@
+//server usage - to render view
 module.exports.fileNames = {
     index: './web-api/view/index.html',
     list: './web-api/view/employeeList.html',
@@ -7,11 +8,23 @@ module.exports.fileNames = {
     detail: './web-api/view/employeeDetail.html'
 }
 
+
+//client usage - to request view
+module.exports.view = {
+    index: 'index',
+    list: 'employeeList',
+    addNew: 'employeeCreate',
+    update: 'employeeUpdate',
+    remove: 'employeeRemove',
+    detail:'employeeDetail'
+}
+
+// client usage - to request data from api endpoints
 module.exports.url = {
-    index: './index',
-    list: './employeeList',
-    addNew: '/api/employeeCreate',
-    update: './employeeUpdate',
-    remove: './employeeRemove',
-    detail:'./employeeDetail'
+    index: 'index',
+    list: 'employeeList',
+    addNew: 'employeeCreate',
+    update: 'employeeUpdate',
+    remove: 'employeeRemove',
+    detail:'employeeDetail'
 }
