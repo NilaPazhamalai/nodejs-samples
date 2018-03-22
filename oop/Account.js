@@ -4,7 +4,7 @@ function Account(IBAN, personNo , type){
     this.type = type;
 }
 
-Account.prototype.getFormattedIBAN = ()=>{
+Account.prototype.getFormattedIBAN = function(){
     return this.IBAN;
 }
 

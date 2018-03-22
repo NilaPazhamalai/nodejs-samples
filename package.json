@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/NilaPazhamalai/nodejs-samples#readme",
   "dependencies": {
+    "async": "^2.6.0",
     "formidable": "^1.2.0",
     "fs-dir-module": "file:local_modules/tut-fs-directory-module",
     "nodemailer": "^4.6.3",

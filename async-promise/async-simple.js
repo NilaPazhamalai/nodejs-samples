@@ -1,41 +1,39 @@
-var fs = require('fs');
+
+var async = require('async');
 
 
-var readPromise = (resolve,reject)=>{
-    var input = "./input.txt"; // operation
-    fs.readFile(input,
-    (err,data)=>{
-        if(err){
-            reject(err);
-        }else{
-            console.log('in simple async success ');
-            resolve(data.toString());
-        }
-    });
-}
-var readAsync=()=>{
-    return new Promise(readPromise);
-}
-
-
-var main= ()=>{
-    var readPromise = readAsync();
-    readPromise.then( 
-        (result)=>{
-            console.log('success' + result);
-        },
-        (err)=>{
-            console.log('error in Promise :  ' + err);
-        }
-    ).catch( (reject)=>{
-        console.log("exception: " + reject);  // change result to valu in line 25 to check exceptions in promise
+// The Callback
+function callback(err, data) {
+    if(err) {
+      console.log(err);
+      return;
     }
+    console.log(data);
+  }
+  
+async.parallel({
+    one: ()=>{
+        console.log('fn one test');
+        setTimeout(() => {
+            callback(null, 1);
+        }, 200);
+        
+    },
 
-    );
-}
+    two: ()=>{
+        console.log('fn two test');
+        setTimeout(() => {
+            callback(new Error("error from async"),''); 
+        }, 100);
+    },
+    function(error,result){
+        if(error){
+            console.log('error');
+            console.log(error);
+        }
+        console.log(result);
+    }
+});
 
-console.log('check simple async');
-main();
-console.log('end check simple async');
 
 

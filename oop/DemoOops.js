@@ -10,4 +10,4 @@ var person = new perRef(3421,"John","Doe",32,"12,aa street, CA","john@gmail.com"
 console.log(acc);
 console.log(person);
 console.log(person.company);
-console.log(person.getBenefitInfo());
+console.log(person.getFullInfo());
