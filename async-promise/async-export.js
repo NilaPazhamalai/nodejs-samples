@@ -1,13 +1,19 @@
-function exportToExcel(data,path,callback){
+async function exportToExcel(data,path){
     console.log('in async fn - call back');
      //path = data;
-     for (let index = 0; index < 300; index++) {
-        if(index==300){
-            callback(null,path+ "/fileName.exc");
+    var path1 = await loopFn(path) ;
+    return path1;
+}
+
+
+function loopFn(path){
+    console.log('in loop fn -async');
+    for (let index = 0; index < 500; index++) {
+        if(index==499){
+            console.log("Path from async fn" + path+ "/fileName.exc");
+            return "Path from async fn" + path+ "/fileName.exc";
         }
-        
     }
-    callback(new Error('exception'),'');
 }
 
 function exportToExcelSync(data,path){

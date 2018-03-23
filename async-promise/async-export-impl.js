@@ -17,8 +17,12 @@ var onExportDone = (err,data)=>{
     }
 }
 console.log("call export async");
-exp.exportToExcel('It is the data','C:/temp/doc',onExportDone);
-
+var path = exp.exportToExcel('It is the data','C:/temp/doc');
+console.log("path from asynch call "+ path);
+path.then(
+    value=> console.log("path from asynch call "+ value)
+)
+.catch()
 console.log("end export async");
 
 
