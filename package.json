@@ -24,6 +24,8 @@
   "homepage": "https://github.com/NilaPazhamalai/nodejs-samples#readme",
   "dependencies": {
     "async": "^2.6.0",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
     "formidable": "^1.2.0",
     "fs-dir-module": "file:local_modules/tut-fs-directory-module",
     "nodemailer": "^4.6.3",
