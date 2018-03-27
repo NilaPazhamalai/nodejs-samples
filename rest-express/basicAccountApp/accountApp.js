@@ -8,14 +8,17 @@ function errorHandler(err, req, res, next) {
     res.status(500)
     res.send("Server error in Account application: " + err);
 }
+var logRequest = function (req, res, next) {
+    console.log('LOGGED request ' +  req.url);
+    next();
+}
+  
+accountApp.use(logRequest);
 
 //index routing
 accountApp.use('/', indexRouter);
 // app level routing
 accountApp.use('/accounts', accountAppRouter);
-
-
-
 // app level
 accountApp.use(errorHandler); 
 

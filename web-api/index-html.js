@@ -7,12 +7,12 @@ var viewResolverModule = require("../sample-html-view-resolver-module.js")
 var properties = require('./modules/employee-module-properties.js')
 var employeeRepo = require('./repository/employeeRepo.js');
 var employeeList = [];
+employeeRepo.initRepo(employeeList);
 
 var reqHandler = (request, response) => {
     var uri = request.url;
     if (request.method && uri) {
         if ('/view' == uri) {
-            employeeList = employeeRepo.initRepo(employeeList);
             viewResolverModule.resolveViewPage(properties.fileNames.index, response);
         }
         else if (uri.startsWith('/api/')) {
