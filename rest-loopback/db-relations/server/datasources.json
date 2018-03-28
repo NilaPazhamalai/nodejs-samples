@@ -1,0 +1,12 @@
+{
+  "db_rel_ds": {
+    "host": "localhost",
+    "port": 27017,
+    "url": "mongodb://localhost:27017/dev_db",
+    "database": "dev_db",
+    "password": "",
+    "name": "db_rel_ds",
+    "user": "",
+    "connector": "mongodb"
+  }
+}

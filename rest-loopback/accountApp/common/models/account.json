@@ -1,0 +1,52 @@
+{
+  "name": "Account",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "_id": {
+      "type": "any"
+    },
+    "IBAN": {
+      "type": "string",
+      "required": true
+    },
+    "customer": {
+      "type": "object",
+      "required": true
+    },
+    "type": {
+      "type": "string",
+      "required": true
+    },
+    "balance": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "accountOwner": {
+      "type": "belongsTo",
+      "model": "Customer",
+      "foreignKey": ""
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {}
+}
