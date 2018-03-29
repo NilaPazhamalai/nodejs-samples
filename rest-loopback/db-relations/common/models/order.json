@@ -19,6 +19,15 @@
       "type": "belongsTo",
       "model": "client",
       "foreignKey": ""
+    },
+    "products": {
+      "type": "embedsMany",
+      "model": "Product",
+      "property": "productList",
+      "options": {
+        "validate": true,
+        "forceId": false
+      }
     }
   },
   "acls": [],

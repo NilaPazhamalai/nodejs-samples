@@ -8,5 +8,9 @@
     "name": "db_rel_ds",
     "user": "",
     "connector": "mongodb"
+  },
+  "transient": {
+    "name": "transient",
+    "connector": "transient"
   }
 }

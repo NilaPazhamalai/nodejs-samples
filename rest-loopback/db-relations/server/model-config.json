@@ -20,5 +20,9 @@
   "order": {
     "dataSource": "db_rel_ds",
     "public": true
+  },
+  "Product": {
+    "dataSource": "transient",
+    "public": true
   }
 }

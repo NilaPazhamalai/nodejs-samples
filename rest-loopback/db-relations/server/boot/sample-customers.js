@@ -39,6 +39,29 @@ module.exports = function(app) {
       },
     ];
 
+    var products = [
+      {
+        name: 'Product A',
+        price: 4863.23,
+      },
+      {
+        name: 'Product B',
+        price: 2222.23,
+      },
+      {
+        name: 'Product C',
+        price: 111,
+      },
+      {
+        name: 'Product D',
+        price: 2356.23,
+      },
+      {
+        name: 'Product E',
+        price: 40063.23,
+      },
+    ];
+
       // Create customers and orders
     client.create(customers[0], function(err, instance) {
       if (err) return console.error(err);
@@ -48,10 +71,12 @@ module.exports = function(app) {
       Order.create(orders[0], function(err, instance) {
         if (err) return console.error(err);
         console.log('Order created: ', instance);
+        instance.products.create(products[0]);
       });
       Order.create(orders[1], function(err, instance) {
         if (err) return console.error(err);
         console.log('Order created: ', instance);
+        instance.products.create(products[2]);
       });
     });
     client.create(customers[1], function(err, instance) {
@@ -61,6 +86,7 @@ module.exports = function(app) {
       Order.create(orders[2], function(err, instance) {
         if (err) return console.error(err);
         console.log('Order created: ', instance);
+        instance.products.create(products[1]);
       });
     });
     client.create(customers[2], function(err, instance) {
