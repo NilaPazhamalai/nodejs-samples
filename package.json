@@ -24,11 +24,15 @@
   "homepage": "https://github.com/NilaPazhamalai/nodejs-samples#readme",
   "dependencies": {
     "async": "^2.6.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "formidable": "^1.2.0",
     "fs-dir-module": "file:local_modules/tut-fs-directory-module",
+    "mongoose": "^5.0.12",
     "nodemailer": "^4.6.3",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "request": "^2.85.0",
     "url-pattern": "^1.0.3"
   },

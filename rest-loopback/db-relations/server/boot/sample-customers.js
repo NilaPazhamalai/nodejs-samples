@@ -10,7 +10,7 @@ module.exports = function(app) {
     if (err) throw err;
 
     var customers = [
-        {name: 'Customer A', age: 21},
+    {name: 'Customer A', age: 21},
         {name: 'Customer B', age: 22},
         {name: 'Customer C', age: 23},
         {name: 'Customer D', age: 24},
