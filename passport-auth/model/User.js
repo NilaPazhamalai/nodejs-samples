@@ -2,21 +2,23 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 
 var UserSchema = new mongoose.Schema({  
-  name: String,
   email: String,
+  name: String,
   password: String
 });
 
 
 // methods ======================
 // generating a hash
-UserSchema.methods.generateHash = function(password) {
-  return bcrypt.hashSync(password, bcrypt.genSaltSync(7), null);
+UserSchema.methods.generateHash = async function (password) {
+  var pwd = await bcrypt.hash(password, bcrypt.genSaltSync(7), null);
+  return pwd;
 };
 
 // checking if password is valid
-UserSchema.methods.validPassword = function(password) {
-  return bcrypt.compareSync(password, this.password);
+UserSchema.methods.validPassword = async function (password) {
+  var valid = await bcrypt.compare(password, this.password);
+  return valid;
 };
 
 module.exports = mongoose.model('User', UserSchema);

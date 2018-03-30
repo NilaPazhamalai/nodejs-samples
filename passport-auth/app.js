@@ -1,7 +1,6 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var User = require('./model/User');
 var passport = require('passport');
 var db = require('./db');
 require('./routes/z-passportApp')(passport); // pass passport for configuration
