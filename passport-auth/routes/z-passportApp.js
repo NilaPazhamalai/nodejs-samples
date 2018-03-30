@@ -27,7 +27,7 @@ module.exports = function (passport) {
     try {
       var user = await User.findOne({ email: email });
       if (!user) {
-        return done(null, false);
+        return done(null, false, { message: 'user not found' });
       }
       console.log("user"+ user);
       console.log(user.password);
@@ -35,10 +35,10 @@ module.exports = function (passport) {
       if (user.validPassword(password)) {
         return done(null, user);
       }
-      return done(null, false);
+      return done(null, false, { message: 'password error' });
     } catch (err) {
       console.log(err);
-      return done(err);
+      return done(err,  { message: 'server error' });
     }
   }
 
