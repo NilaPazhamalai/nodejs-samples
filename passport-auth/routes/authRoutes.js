@@ -12,7 +12,7 @@ module.exports = function (passport) {
     var doLogin = function (req, res) {
         res.status(200).send('Hello ' + req.user.name);
     }
-    router.post('/', passport.authenticate('local', { failureRedirect: '/' }), doLogin);
+    router.post('/', passport.authenticate('local'), doLogin);
 
 
     return router;

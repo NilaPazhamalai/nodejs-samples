@@ -26,20 +26,21 @@ module.exports = function (passport) {
     console.log(email + "  - " + password);
     try {
       var user = await User.findOne({ email: email });
-      if (!user) {
+      if (user) {
+        var valid = await user.validPassword(password);
+        if (valid) {
+          return done(null, user);
+        }else{
+          return done(null, false, { message: 'password error' });
+        }
+      }else{
         return done(null, false, { message: 'user not found' });
       }
-      console.log("user"+ user);
-      console.log(user.password);
-      console.log(password);
-      if (user.validPassword(password)) {
-        return done(null, user);
-      }
-      return done(null, false, { message: 'password error' });
     } catch (err) {
-      console.log(err);
-      return done(err,  { message: 'server error' });
+      console.log("error in verify user: " + err);
+      return done(err, false, { message: 'server error' });
     }
+    next();
   }
 
   passport.use(new LocalStrategy({

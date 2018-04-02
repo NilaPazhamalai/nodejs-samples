@@ -39,8 +39,27 @@ describe('passport rest api - flow methods', () => {
     });
     it('check login - with incorrect credentials - email - status', function (done) {
         request.post({url:'http://localhost:3000/', form: {email:'user@sss.com',password:'user3'}}, function(err,res,body){ /* ... */ 
-            res.statusCode.should.equal(401);
+            res.statusCode.should.equal(401); // url redirection
             done();
+        });
+    });
+    it('check login - with incorrect credentials - email - status', function (done) {
+        request.post({url:'http://localhost:3000/', form: {email:'user@sss.com',password:'user3'}}, function(err,res,body){ /* ... */ 
+        body.should.equal('Unauthorized');
+            done();
+        });
+    });
+
+    it('check login - with incorrect credentials - password - status', function (done) {
+        request.post({url:'http://localhost:3000/', form: {email:'user3@sss.com',password:'uer3'}}, function(err,res,body){ /* ... */ 
+            res.statusCode.should.equal(401); // url redirection
+            done();
+        });
+    });
+    it('check login - with incorrect credentials - password - content', function (done) {
+        request.post({url:'http://localhost:3000/', form: {email:'user3@sss.com',password:'uer3'}}, function(err,res,body){ /* ... */ 
+        body.should.equal('Unauthorized');
+        done();
         });
     });
    
