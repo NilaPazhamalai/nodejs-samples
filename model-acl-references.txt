@@ -1,0 +1,74 @@
+PS C:\Users\vennilap\Documents\nodejs-samples\bank-loopback> lb acl
+? Select the model to apply the ACL entry to: Account
+? Select the ACL scope: All methods and properties
+? Select the access type: All (match all types)
+? Select the role All users
+? Select the permission to apply Explicitly deny access
+PS C:\Users\vennilap\Documents\nodejs-samples\bank-loopback> lb acl
+? Select the model to apply the ACL entry to: Account
+? Select the ACL scope: A single method
+? Enter the method name create
+? Select the role Any authenticated user
+? Select the permission to apply Explicitly grant access
+PS C:\Users\vennilap\Documents\nodejs-samples\bank-loopback> lb acl
+? Select the model to apply the ACL entry to: Account
+? Select the ACL scope: A single method
+? Enter the method name upsert
+? Select the role Any authenticated user
+? Select the permission to apply Explicitly grant access
+PS C:\Users\vennilap\Documents\nodejs-samples\bank-loopback> lb acl
+? Select the model to apply the ACL entry to: Account
+? Select the ACL scope: A single method
+? Enter the method name find
+? Select the role Any authenticated user
+? Select the permission to apply Explicitly grant access
+PS C:\Users\vennilap\Documents\nodejs-samples\bank-loopback> lb acl
+? Select the model to apply the ACL entry to: Account
+? Select the ACL scope: A single method
+? Enter the method name destroyById
+? Select the role other
+? Enter the role name: admin
+? Select the permission to apply Explicitly grant access
+PS C:\Users\vennilap\Documents\nodejs-samples\bank-loopback> lb acl
+? Select the model to apply the ACL entry to: Account
+? Select the ACL scope: A single method
+? Enter the method name findOne
+? Select the role Any authenticated user
+? Select the permission to apply Explicitly grant access
+PS C:\Users\vennilap\Documents\nodejs-samples\bank-loopback> lb acl
+? Select the model to apply the ACL entry to: Account
+? Select the ACL scope: A single method
+? Enter the method name findById
+? Select the role Any authenticated user
+? Select the permission to apply Explicitly grant access
+PS C:\Users\vennilap\Documents\nodejs-samples\bank-loopback> lb acl
+? Select the model to apply the ACL entry to: Transaction
+? Select the ACL scope: All methods and properties
+? Select the access type: All (match all types)
+? Select the role All users
+? Select the permission to apply Explicitly deny access
+PS C:\Users\vennilap\Documents\nodejs-samples\bank-loopback> lb acl
+? Select the model to apply the ACL entry to: Transaction
+? Select the ACL scope: A single method
+? Enter the method name create
+? Select the role Any authenticated user
+? Select the permission to apply Explicitly grant access
+PS C:\Users\vennilap\Documents\nodejs-samples\bank-loopback> lb acl
+? Select the model to apply the ACL entry to: Transaction
+? Select the ACL scope: A single method
+? Enter the method name find
+? Select the role Any authenticated user
+? Select the permission to apply Explicitly grant access
+PS C:\Users\vennilap\Documents\nodejs-samples\bank-loopback> lb acl
+? Select the model to apply the ACL entry to: Transaction
+? Select the ACL scope: A single method
+? Enter the method name findOne
+? Select the role Any authenticated user
+? Select the permission to apply Explicitly grant access
+PS C:\Users\vennilap\Documents\nodejs-samples\bank-loopback> lb acl
+? Select the model to apply the ACL entry to: Transaction
+? Select the ACL scope: A single method
+? Enter the method name findById
+? Select the role Any authenticated user
+? Select the permission to apply Explicitly grant access
+PS C:\Users\vennilap\Documents\nodejs-samples\bank-loopback>

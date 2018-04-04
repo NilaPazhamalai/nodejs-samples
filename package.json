@@ -31,6 +31,7 @@
     "fs-dir-module": "file:local_modules/tut-fs-directory-module",
     "mongoose": "^5.0.12",
     "nodemailer": "^4.6.3",
+    "npm": "^5.8.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "request": "^2.85.0",
