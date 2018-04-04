@@ -23,7 +23,26 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "source": {
+      "type": "belongsTo",
+      "model": "Account",
+      "foreignKey": "source_Account_number",
+      "options": {
+        "nestRemoting": true,
+        "validateUpsert":true
+      }
+    },
+    "target": {
+      "type": "belongsTo",
+      "model": "Account",
+      "foreignKey": "target_account_number",
+      "options": {
+        "nestRemoting": true,
+        "validateUpsert":true
+      }
+    }
+  },
   "acls": [
     {
       "accessType": "*",

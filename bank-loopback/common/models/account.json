@@ -24,14 +24,18 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "user_id": {
+      "type": "belongsTo",
+      "model": "User",
+      "foreignKey": "holder_id",
+      "options": {
+        "nestRemoting": true,
+        "validateUpsert":true
+      }
+    }
+  },
   "acls": [
-    {
-      "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "$everyone",
-      "permission": "DENY"
-    },
     {
       "accessType": "EXECUTE",
       "principalType": "ROLE",
@@ -77,3 +81,5 @@
   ],
   "methods": {}
 }
+
+
