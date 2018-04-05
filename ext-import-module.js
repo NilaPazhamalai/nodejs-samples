@@ -2,7 +2,7 @@ var exportModule = require("./ext-export-module")
 var classModule = require("./ext-export-class-module");
 
 
-// named function imports
+// named function imports .
 
 var defaultFolderPath = exportModule.defaultFolderPath;
 var getDefaultOutputFilePath = exportModule.getDefaultOutputFilePath;

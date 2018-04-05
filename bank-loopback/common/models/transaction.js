@@ -38,6 +38,7 @@ module.exports = function (Transaction) {
 
     // remote method to check timing before initiating transaction
     Transaction.allowInitiate = function (cb) {
+
         var startTime = '9:00 AM';
         var endTime = '6:00 PM';
         var response = {allow:false,message:''};
@@ -76,6 +77,7 @@ module.exports = function (Transaction) {
                 type: 'object',
             },
             },
+        ''
     );
 
 };
