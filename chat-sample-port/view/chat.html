@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>chat application</title>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <script>
+        $(function () {
+            var socket = io('http://localhost:8080');
+            var userName = 'anonymous';
+
+            $('#userNameArea').show();
+            $('#chatArea').hide();
+
+
+            socket.on('server_msg', function (msg) {
+                $('#chat').append($('<li>').text(msg));
+            });
+
+            socket.on('user_joined', function (data) {
+                $('#chat').append($('<li>').text(data.username + ' joined' + ' NO of users: ' + data.numUsers));
+            });
+
+            socket.on('user_left',(data)=>{
+                $('#chat').append($('<li>').text(data.username + ' left the converstion' + ' NO of users: ' + data.numUsers));
+            });
+
+            $('form').submit(function () {
+                socket.emit('client_msg', $('#message').val());
+                $('#message').val('');
+                return false;
+            });
+
+
+            $('#savename').click(function () {
+                userName = $('#name').val();
+                socket.emit('add_user', userName);
+                $('#welcomeUser').text("Hi " + userName);
+                $('#userNameArea').hide();
+                $('#chatArea').show();
+
+            });
+        });
+
+    </script>
+
+</head>
+
+<body>
+    <h3>Welcome to chat application</h3>
+    <br>
+
+    <div id="userNameArea">
+        Enter ur Name
+        <input type="text" id="name">
+        <input type="button" id="savename" value="enter">
+    </div>
+    <div id="chatArea">
+        <span id="welcomeUser"></span>
+        <ul id="chat"></ul>
+        <form action="">
+            <textarea name="message" id="message"> Type ur message here!!</textarea>
+            <button>Send</button>
+        </form>
+    </div>
+</body>
