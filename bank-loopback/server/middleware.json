@@ -45,6 +45,7 @@
     "loopback#urlNotFound": {}
   },
   "final:after": {
+    "./middleware/custom-error": {},
     "strong-error-handler": {}
   }
 }
