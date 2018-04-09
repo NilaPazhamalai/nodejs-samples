@@ -21,11 +21,11 @@ TransactionRemoteHandler.prototype.allowInitiateHandler = function (cb) {
         response.message = "";
     }
     return cb(null, response);
-};
+}
 
 TransactionRemoteHandler.prototype.getAccountAsync = function (account_number) {
     var Account = this.app.models.Account;
-    return new Promise(function (resolve, reject, ) {
+    return new Promise(function (resolve, reject) {
         console.log(account_number);
         Account.find({ where: { number: account_number } }, function (err, account) {
             if (err) {
@@ -64,8 +64,7 @@ TransactionRemoteHandler.prototype.updateAccountPromise = function (account) {
 
 }
 
-
-TransactionRemoteHandler.prototype.update = async function (context, remoteMethodOutput, next) {
+TransactionRemoteHandler.prototype.update = async function(context, remoteMethodOutput, next) {
     try {
         var src = await this.getAccountAsync(context.req.body.source_Account_number);
         if (!src[0]) {
@@ -115,6 +114,8 @@ TransactionRemoteHandler.prototype.update = async function (context, remoteMetho
 
 
 }
+
+
 TransactionRemoteHandler.prototype.updateAccountBalanceHandler = function (context, transaction, next) {
     this.update(context, transaction, next);
 

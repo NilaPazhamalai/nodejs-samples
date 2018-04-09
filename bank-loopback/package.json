@@ -11,11 +11,10 @@
     "posttest": "npm run lint && nsp check"
   },
   "dependencies": {
-    "chai": "^4.1.2",
-    "mocha": "^5.0.5",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
     "helmet": "^3.10.0",
+    "isparta": "^4.0.0",
     "loopback": "^3.0.0",
     "loopback-boot": "^2.6.5",
     "loopback-component-explorer": "^5.0.0",
@@ -26,7 +25,13 @@
   "devDependencies": {
     "eslint": "^3.17.1",
     "eslint-config-loopback": "^8.0.0",
-    "nsp": "^2.1.0"
+    "grunt-contrib-clean": "^1.1.0",
+    "nsp": "^2.1.0",
+    "chai": "^4.1.2",
+    "grunt": "^1.0.2",
+    "grunt-mocha-istanbul": "^5.0.2",
+    "istanbul": "^1.0.0-alpha.2",
+    "mocha": "^5.0.5"
   },
   "repository": {
     "type": "",

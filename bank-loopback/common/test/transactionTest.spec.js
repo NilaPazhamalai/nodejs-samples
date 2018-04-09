@@ -1,6 +1,11 @@
-var chai = require('chai');
+ var chai = require('chai');
 var should = chai.should();
 var request = require('request');
+
+var t1 = require('../models/transaction');
+var t2 = require('../models/transaction_remote_handlers');
+var t3 = require('../models/transaction_utils');
+var t4 = require('../models/transaction_validation');
 
 var api = 'http://localhost:3000/api/';
 describe('Transaction - with No Authorization', () => {
@@ -89,63 +94,109 @@ describe('Transaction - with Authorization', () => {
     });
 });
 
-describe('Transaction - CREATE and UPDATE ACCOUNTS', () => {
+describe('Transaction - allow initiate remote method', () => {
 
     var accessToken = '?access_token=I7PmLp9VrGmWNEhd2np3AHMnFd1RDVZ1E73MR5Kpqpm1jJRDqNBBuBbukdrEiD5A';
-    var transactionURLAuth = api + '/Transactions';
+    var transactionURLAuth = api + 'allowInitiate';
+
+
+    it('remote method check', function () {
+        request.get({
+            url: transactionURLAuth + accessToken,
+            function(err, res, body) {
+                JSON.parse(body).allow.should.equal(true);
+                done();
+            }
+        });
+    });
+});
+
+
+describe('Transaction - CREATE transaction - success', () => {
+    var accessToken = '?access_token=I7PmLp9VrGmWNEhd2np3AHMnFd1RDVZ1E73MR5Kpqpm1jJRDqNBBuBbukdrEiD5A';
+    var transactionURLAuth = api + 'Transactions';
 
     var transactionModel = {
-        source_Account_number: "AS125674",
-        target_account_number: "AS125678",
+        source_Account_number: "AS125678",
+        target_account_number: "AS125674",
         amount: 30
     }
 
-    var transaction;
+    var transaction, newId;
 
-    before(function (done) {
+
+
+    it('create trx', function () {
         request.post({ url: transactionURLAuth + accessToken, form: transactionModel },
             function (err, res, body) {
-                transaction = JSON.parse(body);
-                done();
-            });
-    });
+                if (!err) {
+                    transaction = JSON.parse(body);
+                    newId = transaction.id;
 
-    it('should have a username', function () {
-        user.should.have.property('username', 'test');
-    });
-
-    it('create', function (done) {
-        res.statusCode.should.equal(200);
-        done();
-    });
-
-
-    if (newId) {
-        it('read one - status code', function (done) {
-            request.get({ url: transactionURLAuth + '/5ac75b2586b08f27a05ce64b' + accessToken },
-                function (err, res, body) {
                     res.statusCode.should.equal(200);
-                    done();
-                });
-        });
-    }
-    it('update - status code', function (done) {
-        request.put({ url: transactionURLAuth, form: transactionModel },
-            function (err, res, body) {
-                res.statusCode.should.equal(422);
+                    transaction.id.should.not.equal("");
+                }
                 done();
+
+
             });
+
+
     });
-    it('delete - status code', function (done) {
-        request.del({ url: transactionURLAuth + '/45' },
+
+    
+describe('Transaction - CREATE transaction - fail on balance', () => {
+    var accessToken = '?access_token=I7PmLp9VrGmWNEhd2np3AHMnFd1RDVZ1E73MR5Kpqpm1jJRDqNBBuBbukdrEiD5A';
+    var transactionURLAuth = api + 'Transactions';
+
+    var transactionModel = {
+        source_Account_number: "AS125679",
+        target_account_number: "AS125674",
+        amount: 30
+    }
+
+    var transaction, newId;
+
+
+
+    it('create trx - fail on balance', function () {
+        request.post({ url: transactionURLAuth + accessToken, form: transactionModel },
             function (err, res, body) {
-                res.statusCode.should.equal(422);
+                    res.statusCode.should.equal(422);
                 done();
             });
     });
 });
+});
 
-/* 
+
+    /*
+        if (newId) {
+            it('read one - status code', function (done) {
+                request.get({ url: transactionURLAuth + '/5ac75b2586b08f27a05ce64b' + accessToken },
+                    function (err, res, body) {
+                        res.statusCode.should.equal(200);
+                        done();
+                    });
+            });
+        }
+         it('update - status code', function (done) {
+            request.put({ url: transactionURLAuth, form: transactionModel },
+                function (err, res, body) {
+                    res.statusCode.should.equal(422);
+                    done();
+                });
+        });
+        it('delete - status code', function (done) {
+            request.del({ url: transactionURLAuth + '/45' },
+                function (err, res, body) {
+                    res.statusCode.should.equal(422);
+                    done();
+                });
+        }); */
+/*
+
+
 describe('passport rest api - flow methods', () => {
     it('check login - page load', function (done) {
         request('http://localhost:3000/', function (err, res, body) {
@@ -191,4 +242,4 @@ describe('passport rest api - flow methods', () => {
         });
     });
    
-}); */
+}); */ 

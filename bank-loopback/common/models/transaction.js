@@ -34,8 +34,7 @@ module.exports = function (Transaction) {
                     arg: 'allowInitiate',
                     type: 'object',
                 },
-            },
-        );
+            });
  
    
 };

@@ -2,6 +2,11 @@ var chai = require('chai');
 var should = chai.should();
 var request = require('request');
 
+var t1 = require('../models/transaction');
+var t2 = require('../models/transaction_remote_handlers');
+var t3 = require('../models/transaction_utils');
+var t4 = require('../models/transaction_validation');
+
 var api = 'http://localhost:3000/api/';
 describe('User', () => {
     var loginURL = api + 'Users/login'

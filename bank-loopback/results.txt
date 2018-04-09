@@ -1,0 +1,13 @@
+
+[0m[0m
+[0m  User[0m
+  [32m  √[0m[90m Login - success - status code[0m[31m (1315ms)[0m
+  [32m  √[0m[90m Login - success - access token[0m[31m (167ms)[0m
+  [32m  √[0m[90m Login - fail - incorrect email - status[0m
+  [32m  √[0m[90m Login - fail - incorrect email - error code[0m
+  [32m  √[0m[90m Login - fail - incorrect pwd - status[0m[31m (157ms)[0m
+  [32m  √[0m[90m Login - fail - incorrect pwd - error code[0m[31m (161ms)[0m
+
+
+[92m [0m[32m 6 passing[0m[90m (2s)[0m
+
