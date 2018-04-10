@@ -1,4 +1,4 @@
- var chai = require('chai');
+/* var chai = require('chai');
 var should = chai.should();
 var request = require('request');
 
@@ -10,7 +10,7 @@ var t4 = require('../models/transaction_validation');
 var api = 'http://localhost:3000/api/';
 describe('Transaction - with No Authorization', () => {
     var transactionURL = api + '/Transactions';
-    var transactionURLAuth = api + '/Transactions' + '?access_token=I7PmLp9VrGmWNEhd2np3AHMnFd1RDVZ1E73MR5Kpqpm1jJRDqNBBuBbukdrEiD5A';
+    var transactionURLAuth = api + '/Transactions';
 
     var transactionModel = {
         source_Account_number: "AS125679",
@@ -57,13 +57,7 @@ describe('Transaction - with Authorization', () => {
         target_account_number: "AS125678",
         amount: 30
     }
-    it('create - status code', function (done) {
-        request.post({ url: transactionURLAuth + accessToken, form: transactionModel },
-            function (err, res, body) {
-                res.statusCode.should.equal(200);
-                done();
-            });
-    });
+
     it('read - status code', function (done) {
         request.get({ url: transactionURLAuth + accessToken },
             function (err, res, body) {
@@ -78,14 +72,14 @@ describe('Transaction - with Authorization', () => {
                 done();
             });
     });
-    it('update - status code', function (done) {
+    it('update - status code - no access', function (done) {
         request.put({ url: transactionURLAuth, form: transactionModel },
             function (err, res, body) {
                 res.statusCode.should.equal(422);
                 done();
             });
     });
-    it('delete - status code', function (done) {
+    it('delete - status code - no access', function (done) {
         request.del({ url: transactionURLAuth + '/45' },
             function (err, res, body) {
                 res.statusCode.should.equal(422);
@@ -94,22 +88,7 @@ describe('Transaction - with Authorization', () => {
     });
 });
 
-describe('Transaction - allow initiate remote method', () => {
 
-    var accessToken = '?access_token=I7PmLp9VrGmWNEhd2np3AHMnFd1RDVZ1E73MR5Kpqpm1jJRDqNBBuBbukdrEiD5A';
-    var transactionURLAuth = api + 'allowInitiate';
-
-
-    it('remote method check', function () {
-        request.get({
-            url: transactionURLAuth + accessToken,
-            function(err, res, body) {
-                JSON.parse(body).allow.should.equal(true);
-                done();
-            }
-        });
-    });
-});
 
 
 describe('Transaction - CREATE transaction - success', () => {
@@ -126,48 +105,197 @@ describe('Transaction - CREATE transaction - success', () => {
 
 
 
-    it('create trx', function () {
+    it('create trx', function (done) {
         request.post({ url: transactionURLAuth + accessToken, form: transactionModel },
             function (err, res, body) {
-                if (!err) {
-                    transaction = JSON.parse(body);
-                    newId = transaction.id;
-
-                    res.statusCode.should.equal(200);
-                    transaction.id.should.not.equal("");
-                }
+                res.statusCode.should.equal(200);
                 done();
-
-
             });
-
-
     });
+});
 
-    
-describe('Transaction - CREATE transaction - fail on balance', () => {
+describe('Transaction - CREATE transaction - fails ', () => {
     var accessToken = '?access_token=I7PmLp9VrGmWNEhd2np3AHMnFd1RDVZ1E73MR5Kpqpm1jJRDqNBBuBbukdrEiD5A';
     var transactionURLAuth = api + 'Transactions';
+    var transactionModel;
+    describe('Transaction - CREATE transaction - fail on insufficient balance <=0 ', () => {
 
-    var transactionModel = {
-        source_Account_number: "AS125679",
-        target_account_number: "AS125674",
-        amount: 30
-    }
-
-    var transaction, newId;
-
-
-
-    it('create trx - fail on balance', function () {
-        request.post({ url: transactionURLAuth + accessToken, form: transactionModel },
-            function (err, res, body) {
+        before((done) => {
+            transactionModel = {
+                source_Account_number: "AS125679",
+                target_account_number: "AS125674",
+                amount: 30
+            }
+            done();
+        });
+        it('create trx - fail on balance', function (done) {
+            request.post({ url: transactionURLAuth + accessToken, form: transactionModel },
+                function (err, res, body) {
                     res.statusCode.should.equal(422);
-                done();
-            });
+                    done();
+                });
+        });
+    });
+
+    describe('Transaction - CREATE transaction - fail on src empty', () => {
+
+        before((done) => {
+            transactionModel = {
+                source_Account_number: "",
+                target_account_number: "AS125674",
+                amount: 30
+            }
+            done();
+        });
+        it('create trx - fail on src empty', function (done) {
+            request.post({ url: transactionURLAuth + accessToken, form: transactionModel },
+                function (err, res, body) {
+                    res.statusCode.should.equal(422);
+                    done();
+                });
+        });
+    });
+
+
+    describe('Transaction - CREATE transaction - fail on trg empty', () => {
+
+        before((done) => {
+            transactionModel = {
+                source_Account_number: "AS125679",
+                target_account_number: "",
+                amount: 30
+            }
+            done();
+        });
+        it('create trx - fail on trg empty', function (done) {
+            request.post({ url: transactionURLAuth + accessToken, form: transactionModel },
+                function (err, res, body) {
+                    res.statusCode.should.equal(422);
+                    done();
+                });
+        });
+    });
+
+
+    describe('Transaction - CREATE transaction - fail on amount 0', () => {
+
+        before((done) => {
+            transactionModel = {
+                source_Account_number: "AS125679",
+                target_account_number: "AS125674",
+                amount: 0
+            }
+            done();
+        });
+        it('create trx - fail on amount 0', function (done) {
+            request.post({ url: transactionURLAuth + accessToken, form: transactionModel },
+                function (err, res, body) {
+                    res.statusCode.should.equal(422);
+                    done();
+                });
+        });
+    });
+
+    describe('Transaction - CREATE transaction - fail on src and trg same', () => {
+
+        before((done) => {
+            transactionModel = {
+                source_Account_number: "AS125679",
+                target_account_number: "AS125679",
+                amount: 30
+            }
+            done();
+        });
+        it('create trx - src and trg same', function (done) {
+            request.post({ url: transactionURLAuth + accessToken, form: transactionModel },
+                function (err, res, body) {
+                    res.statusCode.should.equal(422);
+                    done();
+                });
+        });
+    });
+
+
+    describe('Transaction - CREATE transaction - fail on balance in account', () => {
+
+        before((done) => {
+            transactionModel = {
+                source_Account_number: "AS125679",
+                target_account_number: "AS125674",
+                amount: 30
+            }
+            done();
+        });
+        it('create trx - fail on balance in account', function (done) {
+            request.post({ url: transactionURLAuth + accessToken, form: transactionModel },
+                function (err, res, body) {
+                    res.statusCode.should.equal(422);
+                    done();
+                });
+        });
+    });
+
+
+    describe('Transaction - CREATE transaction - fail on amount numericality', () => {
+
+        before((done) => {
+            transactionModel = {
+                source_Account_number: "AS125679",
+                target_account_number: "AS125674",
+                amount: 'hj'
+            }
+            done();
+        });
+        it('create trx - fail on amount numericality', function (done) {
+            request.post({ url: transactionURLAuth + accessToken, form: transactionModel },
+                function (err, res, body) {
+                    res.statusCode.should.equal(422);
+                    done();
+                });
+        });
+    });
+
+
+    describe('Transaction - CREATE transaction - fail on tgt acc incorrect', () => {
+
+        before((done) => {
+            transactionModel = {
+                source_Account_number: "AS125679",
+                target_account_number: "AS12564",
+                amount: 30
+            }
+            done();
+        });
+        it('create trx - fail on tgt acc incorrect', function (done) {
+            request.post({ url: transactionURLAuth + accessToken, form: transactionModel },
+                function (err, res, body) {
+                    res.statusCode.should.equal(422);
+                    done();
+                });
+        });
+    });
+
+
+    describe('Transaction - CREATE transaction - fail on src acc incorrect', () => {
+
+        before((done) => {
+            transactionModel = {
+                source_Account_number: "AS12567",
+                target_account_number: "AS125674",
+                amount: 30
+            }
+            done();
+        });
+        it('create trx - fail on src acc incorrect', function (done) {
+            request.post({ url: transactionURLAuth + accessToken, form: transactionModel },
+                function (err, res, body) {
+                    res.statusCode.should.equal(422);
+                    done();
+                });
+        });
     });
 });
-});
+
 
 
     /*

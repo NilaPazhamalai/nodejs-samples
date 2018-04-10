@@ -1,4 +1,4 @@
-/* 'use strict';
+'use strict';
 
 module.exports = function (app) {
     var User = app.models.User;
@@ -23,9 +23,9 @@ module.exports = function (app) {
                 principalType: RoleMapping.USER,
                 principalId: users[2].id
             }, function (err, principal) {
-                throw(err);
+               if (err) throw(err);
             });
         });
     });
 
-} */
+}

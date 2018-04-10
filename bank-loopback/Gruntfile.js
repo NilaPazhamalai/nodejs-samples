@@ -1,24 +1,11 @@
 module.exports = function(grunt){
     grunt.initConfig({
         mocha_istanbul: {
-            coverage: {
-                src: 'common/test', // a folder works nicely 
-                options: {
-                    mask: '*.spec.js'
-                }
-            },
-            coverageSpecial: {
-                src: ['testSpecial/*/*.js', 'testUnique/*/*.js'], // specifying file patterns works as well 
-                options: {
-                    coverageFolder: 'coverageSpecial',
-                    mask: '*.spec.js',
-                    mochaOptions: ['--harmony','--async-only'], // any extra options 
-                    istanbulOptions: ['--harmony','--handle-sigint']
-                }
-            },
             coveralls: {
-                src: ['common/test','common/test/unitTest'], // multiple folders also works 
+                src: ['common/test/unitTest'], // multiple folders also works 
                 options: {
+                    mask: '*.spec.js',
+                    timeout:5000,
                     coverage:true, // this will make the grunt.event.on('coverage') event listener to be triggered 
                     check: {
                         lines: 20,
@@ -39,7 +26,35 @@ module.exports = function(grunt){
               }
             }
           }
+        },
+
+        //our JSHint options
+        jshint: {
+            all: ['common/models/*.js'] //files to lint
+        },
+
+        //our concat options
+        concat: {
+            options: {
+                separator: ';' //separates scripts
+            },
+            dist: {
+                src: ['common/models/*.js'], //Using mini match for your scripts to concatenate
+                dest: 'js/script.js' //where to output the script
+            }
+        },
+
+        //our uglify options
+        uglify: {
+            js: {
+                files: {
+                    'js/script.js': ['js/script.js'] //save over the newly created script
+                }
+            }
         }
+
+
+
  
     });
  
@@ -49,7 +64,14 @@ module.exports = function(grunt){
     });
  
     grunt.loadNpmTasks('grunt-mocha-istanbul');
- 
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+
     grunt.registerTask('coveralls', ['mocha_istanbul:coveralls']);
-    grunt.registerTask('coverage', ['mocha_istanbul:coverage']);
+    grunt.registerTask('default', ['coveralls']);
+
+
+    grunt.registerTask('dev', ['coveralls','istanbul_check_coverage','jshint']);
+    grunt.registerTask('pro', ['coveralls','istanbul_check_coverage','jshint', 'concat', 'uglify']);
 };
