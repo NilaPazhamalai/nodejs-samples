@@ -1,11 +1,26 @@
 module.exports = function(grunt){
     grunt.initConfig({
         mocha_istanbul: {
+            coverhttp: {
+                coverageFolder: 'coverageHttp',
+                src: ['common/test'], // multiple folders also works 
+                options: {
+                    mask: '*.spec.js',
+                    coverage:true, // this will make the grunt.event.on('coverage') event listener to be triggered 
+                    check: {
+                        lines: 20,
+                        statements: 20
+                    },
+                    root: './common/models/', // define where the cover task should consider the root of libraries that are covered by tests 
+                    reportFormats: ['html','lcovonly']
+                }
+            },
             coveralls: {
                 src: ['common/test/unitTest'], // multiple folders also works 
                 options: {
+                    coverageFolder: 'coverageUnit',
                     mask: '*.spec.js',
-                    timeout:5000,
+                    timeout:10000,
                     coverage:true, // this will make the grunt.event.on('coverage') event listener to be triggered 
                     check: {
                         lines: 20,
@@ -68,6 +83,7 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
+    grunt.registerTask('coverhttp', ['mocha_istanbul:coverhttp']);
     grunt.registerTask('coveralls', ['mocha_istanbul:coveralls']);
     grunt.registerTask('default', ['coveralls']);
 

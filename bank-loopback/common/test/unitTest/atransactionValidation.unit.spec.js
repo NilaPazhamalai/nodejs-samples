@@ -6,8 +6,7 @@ var Transaction = app.models.Transaction;
 
 var trx_validate = require('../../models/transaction_validation');
 var trx_util = require('../../models/transaction_utils');
-var trx_handler = require('../../models/transaction_remote_handlers').TransactionRemoteHandler;
-var t = new trx_handler(app);
+var trx_handler = require('../../models/transaction_remote_handlers');
 
 var source_Account_number = "AS125674";
 var target_account_number = "AS125678";
@@ -171,6 +170,8 @@ describe('Transaction - validation - Unit Test', () => {
             });
         });
     });
+
+    
 });
 
         

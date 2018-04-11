@@ -7,8 +7,7 @@ var Account = app.models.Account;
 
 var trx_validate = require('../../models/transaction_validation');
 var trx_util = require('../../models/transaction_utils');
-var trx_handler = require('../../models/transaction_remote_handlers').TransactionRemoteHandler;
-var t = new trx_handler(app);
+var trx_handler = require('../../models/transaction_remote_handlers');
 
 var srcAcc = { number: 'AS235689', balance: 100, type: 'savings', holder_id: '5ac4cc971fe3d024382b4e32' };
 var tgtAcc = { number: 'AS235688', balance: 100, type: 'current', holder_id: '5ac4cc971fe3d024382b4e32' };
@@ -31,7 +30,7 @@ describe('Transaction - before remote hook test - date time', () => {
         };
 
         it('date time set', function (done) {
-            t.setDateTimeHandler(reqCtx, transaction, function () {
+            trx_handler.setDateTimeHandler(reqCtx, transaction, function () {
                 should.exist(reqCtx.req.body.date);
                 done();
             });
@@ -52,7 +51,15 @@ describe('Transaction - before remote hook test - date time', () => {
         };
 
         it('date time override', function (done) {
-            t.setDateTimeHandler(reqCtx, transaction, function () {
+            trx_handler.setDateTimeHandler(reqCtx, transaction, function () {
+                var createdDate = new Date(reqCtx.req.body.date);
+                createdDate.getDate().should.equal(new Date().getDate());
+                done();
+            });
+        });
+
+        it('test error', function (done) {
+            trx_handler.setDateTimeHandler(reqCtx, transaction, function () {
                 var createdDate = new Date(reqCtx.req.body.date);
                 createdDate.getDate().should.equal(new Date().getDate());
                 done();
@@ -63,143 +70,5 @@ describe('Transaction - before remote hook test - date time', () => {
 });
  
 
-describe('Transaction - before remote hook test - update account', () => {
-
-    var transaction = {};
-    var reqCtx;
-
-    describe('update account - success ', () => {
-        before( (done) => {
-            reqCtx = {
-                req: {
-                    body: {
-                        source_Account_number: srcAcc.number,
-                        target_account_number: tgtAcc.number,
-                        amount: 20
-                    }
-                }
-            }; done();
-        });
-
-
-
-        it('update accounts - success', function (done) {
-            var next = ()=>{
-                should.not.exist(error);
-                should.exist(reqCtx.req.body.updSrc);
-                should.exist(reqCtx.req.body.updTgt);
-                done();
-            }
-            var next = (error)=>{
-               
-                done();
-            }
-            setTimeout(t.updateAccountBalanceHandler(reqCtx, transaction, next),4000);
-        });
-    });
-
-
-    describe('update account - fail on zero balance ', () => {
-        before((done)=> {
-            reqCtx = {
-                req: {
-                    body: {
-                        source_Account_number: zeroSrcAcc.number,
-                        target_account_number: tgtAcc.number,
-                        amount: 20
-                    }
-                }
-            }; done();
-        });
-
-
-
-        it('update accounts - fail on zero balance', function (done) {
-            var next = ()=>{}
-            var next = (error)=>{
-                should.exist(error);
-                done();
-            }
-            t.updateAccountBalanceHandler(reqCtx, transaction, next);
-        });
-    });
-
-
-    describe('update account - fail on nega balance ', () => {
-        before((done) => {
-            reqCtx = {
-                req: {
-                    body: {
-                        source_Account_number: negSrcAcc.number,
-                        target_account_number: tgtAcc.number,
-                        amount: 20
-                    }
-                }
-            }; done();
-        });
-
-
-
-        it('update accounts - fail on nega balance', function (done) {
-            var next = ()=>{}
-            var next = (error)=>{
-                should.exist(error);
-                done();
-            }
-            t.updateAccountBalanceHandler(reqCtx, transaction, next);
-        });
-    });
-
-    describe('update account - src account not found ', () => {
-        before((done) =>{
-            reqCtx = {
-                req: {
-                    body: {
-                        source_Account_number: negSrcAcc.number + '1',
-                        target_account_number: tgtAcc.number,
-                        amount: 20
-                    }
-                }
-            }; 
-            done();
-        });
-
-
-
-        it('update accounts - src account not found', function (done) {
-            var next = ()=>{}
-            var next = (error)=>{
-                should.exist(error);
-                done();
-            }
-            t.updateAccountBalanceHandler(reqCtx, transaction, next);
-        });
-    });
-
-
-    describe('update account - tgt account not found ', () => {
-        before((done) => {
-            reqCtx = {
-                req: {
-                    body: {
-                        source_Account_number: negSrcAcc.number,
-                        target_account_number: tgtAcc.number + '1',
-                        amount: 20
-                    }
-                }
-            };
-            done();
-        });
-
-        it('update accounts - tgt account not found', function (done) {
-            var next = ()=>{}
-            var next = (error)=>{
-                should.exist(error);
-                done();
-            }
-            t.updateAccountBalanceHandler(reqCtx, transaction, next);
-        });
-    });
-});
 
  

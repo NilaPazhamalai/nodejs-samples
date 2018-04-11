@@ -1,4 +1,4 @@
-'use strict';
+/* 'use strict';
 
 module.exports = function (app) {
     var User = app.models.User;
@@ -28,4 +28,4 @@ module.exports = function (app) {
         });
     });
 
-}
+} */

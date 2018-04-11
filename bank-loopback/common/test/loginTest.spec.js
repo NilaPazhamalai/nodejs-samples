@@ -1,4 +1,4 @@
-/* var chai = require('chai');
+ var chai = require('chai');
 var should = chai.should();
 var request = require('request');
 
@@ -56,4 +56,4 @@ describe('User', () => {
         });
     });
 });
- */
+ 

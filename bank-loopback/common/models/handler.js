@@ -1,23 +1,17 @@
 module.exports = {
-    allowInitiateHandler : allowInitiateHandler,
-    setDateTimeHandler : setDateTimeHandler,
-    update : update,
-    updateAccountBalanceHandler : updateAccountBalanceHandler
+    TransactionRemoteHandler: TransactionRemoteHandler
 }
 
+
 var trx_util = require('./transaction_utils');
-var accUtil = require('./account_utils');
-var getAccountAsync = accUtil.getAccountAsync;
-var updateAccountBalancePromise = accUtil.updateAccountBalancePromise;
-var updateAccountPromise = accUtil.updateAccountPromise;
 
 // remote hook - existing rest end point create
-function setDateTimeHandler(context, transaction, next) {
+TransactionRemoteHandler.prototype.setDateTimeHandler = function (context, transaction, next) {
     context.req.body.date = new Date();
     next();
 }
 
-function allowInitiateHandler(cb) {
+TransactionRemoteHandler.prototype.allowInitiateHandler = function (cb) {
     var response = { allow: false, message: "Transaction not allowed between " + trx_util.startTime + " and " + trx_util.endTime };
     var allow = trx_util.checkCurrentTimeInRange(trx_util.startTime, trx_util.endTime, new Date());
     if (allow) {
@@ -27,9 +21,56 @@ function allowInitiateHandler(cb) {
     return cb(null, response);
 }
 
- async function update(context, remoteMethodOutput, next) {
+TransactionRemoteHandler.prototype.getAccountAsync = function (account_number) {
+    var Account = this.app.models.Account;
+    return new Promise(function (resolve, reject) {
+        console.log(account_number);
+        Account.find({ where: { number: account_number } }, function (err, account) {
+            if (err) {
+                return reject(err);
+            } else {
+                console.log('Account found:' + [account]);
+                return resolve(account);
+            }
+        });
+    });
+}
+
+TransactionRemoteHandler.prototype.updateAccountBalancePromise = function (account, balance, srcIc) {
+    console.log('Account came for update:' + [account]);
+    return new Promise(function (resolve, reject) {
+       if(typeof(balance)===number){
+        var bal = account.balance;
+        if (srcIc) {
+            bal -= balance;
+        } else {
+            bal += balance;
+        }
+        account.balance = bal;
+        resolve(account);
+    }else{
+        reject(new Error('amount not number'));
+    }
+    });
+}
+
+TransactionRemoteHandler.prototype.updateAccountPromise = function (account) {
+    var Account = this.app.models.Account;
+    return new Promise(function (resolve, reject) {
+        Account.upsert(account, function (err, account) {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(account);
+            }
+        });
+    });
+
+}
+
+TransactionRemoteHandler.prototype.update = async function(context, remoteMethodOutput, next) {
     try {
-        var src = await getAccountAsync(context.req.body.source_Account_number);
+        var src = await this.getAccountAsync(context.req.body.source_Account_number);
         if (!src[0]) {
             console.log('source acc not found !!! ' + context.req.body.source_Account_number);
             var error = new Error('source acc not found !!! ' + context.req.body.source_Account_number);
@@ -43,25 +84,27 @@ function allowInitiateHandler(cb) {
                 return next(error);
             }
         }
-        var tgt = await getAccountAsync(context.req.body.target_account_number);
+        var tgt = await this.getAccountAsync(context.req.body.target_account_number);
         if (!tgt[0]) {
             console.log('target acc not found !!! ' + context.req.body.target_account_number);
             var error = new Error('target acc not found !!! ' + context.req.body.target_account_number);
             error.status = 422;
             return next(error);
         }
-        var updSrc = await updateAccountBalancePromise(src[0], context.req.body.amount, true);
-        var updTgt = await updateAccountBalancePromise(tgt[0], context.req.body.amount, false);
+        console.log('Accounts :' + [src[0],tgt[0]]);
+        var updSrc = await this.updateAccountBalancePromise(src[0], context.req.body.amount, true);
+        var updTgt = await this.updateAccountBalancePromise(tgt[0], context.req.body.amount, false);
 
         try {
-            var updSrcAcc = await updateAccountPromise(updSrc);
+            var updSrcAcc = await this.updateAccountPromise(updSrc);
             try {
-                var updTgtAcc = await updateAccountPromise(updTgt);
+                var updTgtAcc = await this.updateAccountPromise(updTgt);
                 context.req.body.updSrc = updSrcAcc;
                 context.req.body.updTgt = updTgtAcc;
+                console.log('updated Accounts :' + [updSrcAcc,updTgtAcc]);
                 return next();
             } catch (err) {
-                await updateAccountPromise(src); // log on error and some batch process to revert manually
+                await this.updateAccountPromise(src); // log on error and some batch process to revert manually
                 console.log('error occured while updating tgt acc, so src upd reverted !!!');
                 return next(new Error('error occured while updating tgt acc, so src upd reverted !!!'));
             }
@@ -78,8 +121,9 @@ function allowInitiateHandler(cb) {
 }
 
 
-function updateAccountBalanceHandler(context, transaction, next) {
-    update(context, transaction, next);
+TransactionRemoteHandler.prototype.updateAccountBalanceHandler = function (context, transaction, next) {
+    this.update(context, transaction, next);
+
     // not for MongoDB , but for other connector "TRX" is available - below code can be used
     //this.updateAccountBalanceUsingTransaction(context, transaction, next);
 }

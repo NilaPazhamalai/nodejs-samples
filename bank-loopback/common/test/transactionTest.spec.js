@@ -1,4 +1,4 @@
-/* var chai = require('chai');
+var chai = require('chai');
 var should = chai.should();
 var request = require('request');
 
@@ -321,7 +321,7 @@ describe('Transaction - CREATE transaction - fails ', () => {
                     res.statusCode.should.equal(422);
                     done();
                 });
-        }); */
+        }); 
 /*
 
 
@@ -370,4 +370,4 @@ describe('passport rest api - flow methods', () => {
         });
     });
    
-}); */ 
+}); */
