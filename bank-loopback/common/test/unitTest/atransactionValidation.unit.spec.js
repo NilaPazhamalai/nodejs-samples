@@ -10,31 +10,44 @@ var trx_handler = require('../../models/transaction_remote_handlers');
 
 var source_Account_number = "AS125674";
 var target_account_number = "AS125678";
-var amount= 30;
-var date = new Date();   
+var amount = 30;
+var date = new Date();
 
-describe('Transaction - validation - Unit Test', () => {
-    describe('validatePresence', () => {
-        Transaction.validatesPresenceOf('source_Account_number', 'target_account_number', 'amount');
-        describe('validatePresence - success', () => {
-            var transaction = new Transaction(
+
+var isValid = function (transaction) {
+    return new Promise(function (resolve, reject) {
+        transaction.isValid(function (isValid) {
+            if (isValid) {
+                return resolve(isValid);
+            } else {
+                return reject(isValid);
+            }
+        });
+    });
+}
+describe('Transaction - validation - Unit Test', function () {
+
+    it('success call', function (done) {
+       // Transaction.validatesPresenceOf('source_Account_number', 'target_account_number', 'amount');
+        var transaction = new Transaction(
             {
                 source_Account_number: "AS125674",
                 target_account_number: "AS125678",
                 amount: 30
             });
-            it('sucess call', function(done){
-                transaction.isValid(function (isValid) {
-                    isValid.should.equal(true);
-                    done();
-                });
-                
-            });
-        });
+        isValid(transaction)
+            .catch(function (err) {
+                done(err);
+            })
+            .then(function (isValid) {
+                done();
+            })
     });
+});
 
 
-    describe('validateAsync - date', () => {
+
+    /* describe('validateAsync - date', () => {
         Transaction.validateAsync('date', trx_validate.validateTime, { message: 'Transaction not allowed between ' + trx_util.startTime + ' and ' + trx_util.endTime });
         var transaction;
         describe('validateAsync - date - fail', () => {
@@ -169,9 +182,8 @@ describe('Transaction - validation - Unit Test', () => {
                 
             });
         });
-    });
+    }); */
 
-    
-});
 
-        
+
+

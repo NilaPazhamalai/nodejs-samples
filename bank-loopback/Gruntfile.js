@@ -1,93 +1,57 @@
-module.exports = function(grunt){
+module.exports = function (grunt) {
     grunt.initConfig({
-        mocha_istanbul: {
-            coverhttp: {
-                coverageFolder: 'coverageHttp',
-                src: ['common/test'], // multiple folders also works 
-                options: {
-                    mask: '*.spec.js',
-                    coverage:true, // this will make the grunt.event.on('coverage') event listener to be triggered 
-                    check: {
-                        lines: 20,
-                        statements: 20
-                    },
-                    root: './common/models/', // define where the cover task should consider the root of libraries that are covered by tests 
-                    reportFormats: ['html','lcovonly']
-                }
+        pkg: grunt.file.readJSON('package.json'),
+        uglify: {
+            options: {
+                mangle: false,
+                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
+            my_target: {
+                files: {
+                  'dest/output.min.js': ['dest*.js']
+                }
+              }
+        },
+        clean: {
+            folder: ['dest/']
+        },
+        mocha_istanbul: {
             coveralls: {
                 src: ['common/test/unitTest'], // multiple folders also works 
                 options: {
-                    coverageFolder: 'coverageUnit',
                     mask: '*.spec.js',
-                    timeout:10000,
-                    coverage:true, // this will make the grunt.event.on('coverage') event listener to be triggered 
+                    coverage: true, // this will make the grunt.event.on('coverage') event listener to be triggered 
                     check: {
-                        lines: 20,
-                        statements: 20
+                        lines: 100,
+                        statements: 100
                     },
-                    root: './common/models/', // define where the cover task should consider the root of libraries that are covered by tests 
-                    reportFormats: ['html','lcovonly']
+                    //root: './common/modes', // define where the cover task should consider the root of libraries that are covered by tests 
+                    reportFormats: ['html', 'lcovonly']
                 }
             }
         },
         istanbul_check_coverage: {
-          default: {
-            options: {
-              coverageFolder: 'coverage*', // will check both coverage folders and merge the coverage results 
-              check: {
-                lines: 80,
-                statements: 80
-              }
-            }
-          }
-        },
-
-        //our JSHint options
-        jshint: {
-            all: ['common/models/*.js'] //files to lint
-        },
-
-        //our concat options
-        concat: {
-            options: {
-                separator: ';' //separates scripts
-            },
-            dist: {
-                src: ['common/models/*.js'], //Using mini match for your scripts to concatenate
-                dest: 'js/script.js' //where to output the script
-            }
-        },
-
-        //our uglify options
-        uglify: {
-            js: {
-                files: {
-                    'js/script.js': ['js/script.js'] //save over the newly created script
+            default: {
+                options: {
+                    coverageFolder: 'coverage*', // will check both coverage folders and merge the coverage results 
+                    check: {
+                        lines: 100,
+                        statements: 100
+                    }
                 }
             }
         }
 
-
-
- 
     });
- 
-    grunt.event.on('coverage', function(lcovFileContents, done){
+
+    grunt.event.on('coverage', function (lcovFileContents, done) {
         // Check below on the section "The coverage event" 
         done();
     });
- 
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-mocha-istanbul');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-uglify-es');
 
-    grunt.registerTask('coverhttp', ['mocha_istanbul:coverhttp']);
     grunt.registerTask('coveralls', ['mocha_istanbul:coveralls']);
-    grunt.registerTask('default', ['coveralls']);
-
-
-    grunt.registerTask('dev', ['coveralls','istanbul_check_coverage','jshint']);
-    grunt.registerTask('pro', ['coveralls','istanbul_check_coverage','jshint', 'concat', 'uglify']);
+    grunt.registerTask('testCoverBuild', ['coveralls', 'clean', 'uglify']);
 };
